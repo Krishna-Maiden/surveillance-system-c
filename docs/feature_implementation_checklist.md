@@ -10,6 +10,7 @@
 | Alerting & Notifications (Email/SMS/Push/Incident Mgmt) | ✗ (API exists, but no real notification integration) |
 | Scalability & Performance | ✗ (In-memory repos, no real scaling/storage logic) |
 | Security & Compliance | ✗ (No authentication/authorization, no encryption, no RBAC) |
+| Live Video Streaming & Real-Time AI Analysis | ✓ (Implemented: browser webcam streams frames to backend for live detection) |
 
 ---
 

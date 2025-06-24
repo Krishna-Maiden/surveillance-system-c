@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 // Register repositories
 builder.Services.AddSingleton<ICameraRepository, InMemoryCameraRepository>();
@@ -40,5 +41,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<AiAnalysisHub>("/aihub");
 
 app.Run();
