@@ -2,10 +2,12 @@ using Surveillance.API.Models;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Azure.AI.Vision.ImageAnalysis;
+using Azure.AI.Vision.Common;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Azure;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 
 namespace Surveillance.API.Services
 {
@@ -29,24 +31,26 @@ namespace Surveillance.API.Services
 
         public async Task<AnalyzeResult> AnalyzeImageAsync(AnalyzeImageRequest request)
         {
-            var client = new ImageAnalyzerClient(new Uri(_endpoint), new AzureKeyCredential(_apiKey));
-            ImageSource imageSource;
+            var client = new ImageAnalysisClient(new Uri(_endpoint), new AzureKeyCredential(_apiKey));
+            ImageAnalysisResult result;
             if (!string.IsNullOrEmpty(request.ImageBase64))
             {
                 var bytes = Convert.FromBase64String(request.ImageBase64);
-                imageSource = ImageSource.FromBytes(bytes);
+                result = await client.AnalyzeAsync(
+                    BinaryData.FromBytes(bytes),
+                    VisualFeatures.Tags);
             }
             else if (!string.IsNullOrEmpty(request.ImageUrl))
             {
-                imageSource = ImageSource.FromUrl(new Uri(request.ImageUrl));
+                result = await client.AnalyzeAsync(
+                    new Uri(request.ImageUrl),
+                    VisualFeatures.Tags);
             }
             else
             {
                 throw new ArgumentException("No image provided.");
             }
-            var analysisOptions = new ImageAnalysisOptions() { Features = ImageAnalysisFeature.Tags };
-            var result = await client.AnalyzeAsync(imageSource, analysisOptions);
-            var detections = result.Tags.Select(t => new Detection
+            var detections = result.Tags.Values.Select(t => new Detection
             {
                 Type = t.Name,
                 Confidence = t.Confidence,
