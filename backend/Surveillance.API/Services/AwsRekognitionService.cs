@@ -50,7 +50,7 @@ namespace Surveillance.API.Services
             var detections = response.Labels.Select(l => new Detection
             {
                 Type = l.Name,
-                Confidence = l.Confidence / 100.0,
+                Confidence = (l.Confidence ?? 0) / 100.0,
                 Location = "N/A"
             }).ToArray();
             return new AnalyzeResult { Success = true, Detections = detections };

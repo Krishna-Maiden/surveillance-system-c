@@ -5,6 +5,7 @@ using Azure.AI.Vision.ImageAnalysis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Azure;
 
 namespace Surveillance.API.Services
 {
