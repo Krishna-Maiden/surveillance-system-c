@@ -1,0 +1,13 @@
+flowchart TD
+    A["CCTV Cameras"] -->|"RTSP/HTTP Streams"| B["Edge Device (Optional)"]
+    B -->|"Pre-processed Video"| C["Cloud Video Ingestion Service"]
+    C --> D["Cloud Storage (Blob/S3/Azure)"]
+    C --> E["Real-time Analytics (AI/ML Service: AWS Rekognition / Azure Cognitive)"]
+    E --> F["Alerting & Notification Service"]
+    F --> G["Email/SMS/Push/Incident Mgmt"]
+    E --> H["Event/Incident Database"]
+    H --> I["Web API (ASP.NET Core)"]
+    D --> I
+    I --> J["React Web Dashboard"]
+    J -->|"User Actions"| I
+    I -->|"APIs"| K["Integration with Existing Systems"] 
