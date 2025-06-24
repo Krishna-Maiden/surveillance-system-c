@@ -1,4 +1,33 @@
 flowchart TD
+    A["User/Operator"] -->|"Accesses UI"| B["Frontend React App"]
+    B -->|"Sends API Requests"| C["Backend ASP.NET Core API"]
+    C -->|"Camera Management"| D["Camera Repository"]
+    C -->|"Event Logging"| E["Event Log Repository"]
+    C -->|"AI Analysis Request"| F{"AI Analysis Service"}
+    F -->|"Image/Video Analysis"| G["AWS Rekognition Service"]
+    F -->|"Image/Video Analysis"| H["Azure Cognitive Service"]
+    C -->|"Alert Management"| I["Alerts Controller"]
+    I -->|"Create/View Alerts"| E
+    D -->|"Camera Data"| J["Cameras"]
+    E -->|"Event Data"| K["Event Logs"]
+    B -->|"Displays Results"| L["User Interface"]
+    C -->|"Video Ingest"| M["Video Controller"]
+    M -->|"Store/Analyze Video"| F
+    F -->|"Returns Analysis Results"| C
+    C -->|"Returns Data"| B
+    style A fill:#f9f,stroke:#333,stroke-width:2
+    style B fill:#bbf,stroke:#333,stroke-width:2
+    style C fill:#bfb,stroke:#333,stroke-width:2
+    style F fill:#ffb,stroke:#333,stroke-width:2
+    style G fill:#fff,stroke:#333,stroke-width:1
+    style H fill:#fff,stroke:#333,stroke-width:1
+    style D fill:#eee,stroke:#333,stroke-width:1
+    style E fill:#eee,stroke:#333,stroke-width:1
+    style I fill:#eee,stroke:#333,stroke-width:1
+    style J fill:#fff,stroke:#333,stroke-width:1
+    style K fill:#fff,stroke:#333,stroke-width:1
+    style L fill:#fff,stroke:#333,stroke-width:1
+    style M fill:#eee,stroke:#333,stroke-width:1
     A["CCTV Cameras"] -->|"RTSP/HTTP Streams"| B["Edge Device (Optional)"]
     B -->|"Pre-processed Video"| C["Cloud Video Ingestion Service"]
     C --> D["Cloud Storage (Blob/S3/Azure)"]

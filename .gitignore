@@ -1,4 +1,5 @@
 obj
 bin
-vs
+.vs
 node_modules
+backend/Surveillance.API/Surveillance.API.csproj.user
