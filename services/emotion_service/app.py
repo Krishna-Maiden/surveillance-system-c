@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from deepface import DeepFace
 from PIL import Image
+import numpy as np
 import io
 import base64
 
@@ -15,7 +16,10 @@ def analyze():
     try:
         image_bytes = base64.b64decode(image_base64)
         img = Image.open(io.BytesIO(image_bytes))
-        result = DeepFace.analyze(img_path=img, actions=['emotion'], enforce_detection=False)
+        img_np = np.array(img)
+        result = DeepFace.analyze(img_path=img_np, actions=['emotion'], enforce_detection=False)
+        if isinstance(result, list):
+            result = result[0]
         mood = result['dominant_emotion']
         print(mood)
         return jsonify({'success': True, 'mood': mood, 'emotions': result['emotion']})
