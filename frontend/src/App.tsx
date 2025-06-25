@@ -8,7 +8,7 @@ type Camera = { id: number; name: string; location: string };
 type EventLog = { id: number; cameraId: number; eventType: string; description: string; timestamp: string };
 type Alert = { cameraId: number; message: string; timestamp: string };
 
-type AnalyzeResult = { success: boolean; detections: { type: string; confidence: number; location: string }[] };
+type AnalyzeResult = { success: boolean; detections: { type: string; confidence: number; location: string }[]; mood?: string };
 
 const API = (path: string) => `/api${path}`;
 
@@ -302,6 +302,9 @@ function App() {
         </button>
         {liveResult && (
           <div className="mt-2 w-full">
+            {liveResult.mood && (
+              <div className="font-semibold mb-2">Mood: <span className="text-blue-700">{liveResult.mood.charAt(0).toUpperCase() + liveResult.mood.slice(1)}</span></div>
+            )}
             <div className="font-semibold">Detections:</div>
             <ul className="list-disc ml-6">
               {liveResult.detections.map((d, i) => (

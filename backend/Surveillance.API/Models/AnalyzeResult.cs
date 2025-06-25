@@ -4,6 +4,7 @@ namespace Surveillance.API.Models
     {
         public bool Success { get; set; }
         public Detection[] Detections { get; set; } = Array.Empty<Detection>();
+        public string? Mood { get; set; }
     }
     public record Detection
     {

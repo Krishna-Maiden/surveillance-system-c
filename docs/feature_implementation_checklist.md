@@ -97,6 +97,12 @@
 
 ---
 
+## Backlog
+- Implement mood detection using AWS Rekognition
+- Implement mood detection using open-source Python model (DeepFace/FER)
+
+---
+
 ### Legend
 - ✓ = Done/Present (at least basic implementation)
 - ✗ = Not Done/Not Present

@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Azure;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using System.Linq;
 
 namespace Surveillance.API.Services
 {
@@ -31,32 +32,49 @@ namespace Surveillance.API.Services
 
         public async Task<AnalyzeResult> AnalyzeImageAsync(AnalyzeImageRequest request)
         {
-            var client = new ImageAnalysisClient(new Uri(_endpoint), new AzureKeyCredential(_apiKey));
-            ImageAnalysisResult result;
+            // Use Azure Face API for emotion detection
+            using var http = new HttpClient();
+            http.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _apiKey);
+            string faceApiUrl = $"{_endpoint.TrimEnd('/')}/face/v1.0/detect?returnFaceAttributes=emotion";
+            HttpResponseMessage resp;
             if (!string.IsNullOrEmpty(request.ImageBase64))
             {
+                // Send as binary
                 var bytes = Convert.FromBase64String(request.ImageBase64);
-                result = await client.AnalyzeAsync(
-                    BinaryData.FromBytes(bytes),
-                    VisualFeatures.Tags);
+                using var content = new ByteArrayContent(bytes);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                resp = await http.PostAsync(faceApiUrl, content);
             }
             else if (!string.IsNullOrEmpty(request.ImageUrl))
             {
-                result = await client.AnalyzeAsync(
-                    new Uri(request.ImageUrl),
-                    VisualFeatures.Tags);
+                // Send as JSON with url
+                var json = JsonSerializer.Serialize(new { url = request.ImageUrl });
+                using var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                resp = await http.PostAsync(faceApiUrl, content);
             }
             else
             {
                 throw new ArgumentException("No image provided.");
             }
-            var detections = result.Tags.Values.Select(t => new Detection
+            if (!resp.IsSuccessStatusCode)
             {
-                Type = t.Name,
-                Confidence = t.Confidence,
-                Location = "N/A"
-            }).ToArray();
-            return new AnalyzeResult { Success = true, Detections = detections };
+                return new AnalyzeResult { Success = false, Detections = Array.Empty<Detection>(), Mood = null };
+            }
+            var responseString = await resp.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(responseString);
+            var faces = doc.RootElement.EnumerateArray().ToArray();
+            string? mood = null;
+            if (faces.Length > 0 && faces[0].TryGetProperty("faceAttributes", out var attrs) && attrs.TryGetProperty("emotion", out var emotion))
+            {
+                // Find the emotion with the highest score
+                var emotions = emotion.EnumerateObject().Select(e => new { Name = e.Name, Value = e.Value.GetDouble() });
+                var top = emotions.OrderByDescending(e => e.Value).FirstOrDefault();
+                if (top != null && top.Value > 0.1) // threshold to avoid noise
+                    mood = top.Name;
+            }
+            // Optionally, you can still use the tags detection as before
+            var detections = new Detection[0];
+            return new AnalyzeResult { Success = true, Detections = detections, Mood = mood };
         }
 
         public async Task<object> AnalyzeVideoAsync(AnalyzeVideoRequest request)
