@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Surveillance.API.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
