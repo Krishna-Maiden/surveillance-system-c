@@ -15,6 +15,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
+// Add CORS policy for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Register repositories
 builder.Services.AddSingleton<ICameraRepository, InMemoryCameraRepository>();
 builder.Services.AddSingleton<IEventLogRepository, InMemoryEventLogRepository>();
@@ -40,6 +52,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(); // Apply CORS before controllers and SignalR
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<AiAnalysisHub>("/aihub");

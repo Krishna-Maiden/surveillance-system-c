@@ -54,7 +54,7 @@ function App() {
   useEffect(() => {
     if (view === 'live') {
       const conn = new HubConnectionBuilder()
-        .withUrl('/aihub')
+        .withUrl('https://localhost:7081/aihub')
         .withAutomaticReconnect()
         .build();
       conn.on('AnalysisResult', (result: AnalyzeResult) => setLiveResult(result));
