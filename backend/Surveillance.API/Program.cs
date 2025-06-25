@@ -38,6 +38,10 @@ if (cloudProvider == "Azure")
 {
     builder.Services.AddSingleton<IAiAnalysisService, AzureCognitiveService>();
 }
+else if (cloudProvider == "Python")
+{
+    builder.Services.AddSingleton<IAiAnalysisService, PythonEmotionService>();
+}
 else
 {
     builder.Services.AddSingleton<IAiAnalysisService, AwsRekognitionService>();
