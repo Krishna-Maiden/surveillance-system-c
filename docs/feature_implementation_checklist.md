@@ -100,6 +100,25 @@
 ## Backlog
 - Implement mood detection using AWS Rekognition
 - Implement mood detection using open-source Python model (DeepFace/FER)
+- Aggregate and visualize mood trends over time
+- Trigger alerts for specific moods or prolonged mood states
+- Store mood data for analysis and reporting
+- Use emojis or color codes for mood display
+- Show mood history/timeline per camera
+- Add dashboard widgets for mood statistics
+- Implement face recognition and associate moods with identities
+- Support multi-face mood detection per frame
+- Detect actions (e.g., waving, running, falling) in addition to mood
+- Send notifications (email, SMS, push) for mood/event triggers
+- Integrate with access control systems for mood-based actions
+- Optionally blur faces for privacy
+- Track/manage user consent for mood analysis
+- Optimize performance/cost by batching or reducing frame rate
+- Support edge processing with local models
+- Allow users to configure which moods trigger alerts
+- Allow custom mood/action labels
+- Add mock/test mode for UI without real API calls
+- Improve error handling and fallback for AI service issues
 
 ---
 
