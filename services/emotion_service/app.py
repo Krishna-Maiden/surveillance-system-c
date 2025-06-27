@@ -20,9 +20,12 @@ def analyze():
         result = DeepFace.analyze(img_path=img_np, actions=['emotion'], enforce_detection=False)
         if isinstance(result, list):
             result = result[0]
+        emotions = result['emotion']
         mood = result['dominant_emotion']
-        print(mood)
-        return jsonify({'success': True, 'mood': mood, 'emotions': result['emotion']})
+        # Override if happy is strong enough
+        if emotions.get('happy', 0) > 0.5:
+            mood = 'happy'
+        return jsonify({'success': True, 'mood': mood, 'emotions': emotions})
     except Exception as e:
         print("Error in analyze")
         print(e)
