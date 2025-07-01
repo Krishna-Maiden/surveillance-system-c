@@ -5,6 +5,7 @@
 |---------|--------|
 | Cloud Platform Integration | ✓ (AWS/Azure supported, config-driven) |
 | Video Ingestion & Storage | ✗ (API exists, but no real storage logic implemented) |
+| Video Retrieval & Playback | ✗ (No playback or forensic review logic) |
 | Real-time Video Analytics (AI/ML) | ✓ (AWS Rekognition/Azure Cognitive integration for image/video) |
 | User Interface (Web Dashboard) | ✓ (React frontend scaffolded) |
 | Alerting & Notifications (Email/SMS/Push/Incident Mgmt) | ✗ (API exists, but no real notification integration) |
@@ -45,6 +46,7 @@
 | Anomaly Detection | ✗ (Not implemented) |
 | Search & Forensic Review | ✗ (No search UI or backend logic) |
 | Incident Tagging & Annotation | ✗ (Not implemented) |
+| OCR (Optical Character Recognition) | ✓ (Implemented via Python microservice) |
 
 ---
 
@@ -67,7 +69,7 @@
 | Feature | Status |
 |---------|--------|
 | Cloud Platform Recommendation | ✓ (AWS/Azure supported) |
-| Camera Compatibility | ✗ (No explicit compatibility logic) |
+| Camera Compatibility (ONVIF, RTSP, etc.) | ✗ (No explicit compatibility logic) |
 | Edge Processing (Optional) | ✗ (Not implemented) |
 | Data Formats (Video/Data) | ✗ (No explicit handling) |
 | Network Requirements | ✗ (Not addressed) |
@@ -97,7 +99,7 @@
 
 ---
 
-## Backlog
+## Backlog & Advanced Features
 - Implement mood detection using AWS Rekognition
 - Implement mood detection using open-source Python model (DeepFace/FER)
 - Aggregate and visualize mood trends over time
@@ -119,6 +121,17 @@
 - Allow custom mood/action labels
 - Add mock/test mode for UI without real API calls
 - Improve error handling and fallback for AI service issues
+- Implement video storage and retrieval (cloud/local)
+- Integrate alerting/notification (email, SMS, push)
+- Add authentication, authorization, and encryption
+- Implement motion and anomaly detection
+- Add vehicle/asset management features (LPR, tracking)
+- Add fire, intrusion, and PPE detection logic
+- Optimize for scalability and performance
+- Implement search, tagging, and annotation for forensic review
+- Add camera compatibility (ONVIF, RTSP, etc.)
+- Write deployment/configuration guides and user manuals
+- Add project timeline, milestones, and cost breakdown
 
 ---
 
