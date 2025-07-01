@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 
-type View = 'dashboard' | 'cameras' | 'video' | 'events' | 'alerts' | 'live';
+type View = 'dashboard' | 'cameras' | 'video' | 'events' | 'alerts' | 'live' | 'ocr';
 
 type Camera = { id: number; name: string; location: string };
 type EventLog = { id: number; cameraId: number; eventType: string; description: string; timestamp: string };
@@ -10,7 +10,7 @@ type Alert = { cameraId: number; message: string; timestamp: string };
 
 type AnalyzeResult = { success: boolean; detections: { type: string; confidence: number; location: string }[]; mood?: string };
 
-const API = (path: string) => `/api${path}`;
+const API = (path: string) => `https://localhost:7081/api${path}`;
 
 function App() {
   const [view, setView] = useState<View>('dashboard');
@@ -36,6 +36,10 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [signalRConn, setSignalRConn] = useState<HubConnection | null>(null);
+  const [ocrImage, setOcrImage] = useState<File | null>(null);
+  const [ocrText, setOcrText] = useState<string>('');
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const [ocrError, setOcrError] = useState<string>('');
 
   // Fetch cameras
   useEffect(() => {
@@ -317,6 +321,42 @@ function App() {
     </div>
   );
 
+  const ocrView = (
+    <div className="p-8 max-w-xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">OCR Recognition</h2>
+      <form className="flex flex-col gap-2 mb-4" onSubmit={async e => {
+        e.preventDefault();
+        setOcrText('');
+        setOcrError('');
+        setOcrLoading(true);
+        if (!ocrImage) {
+          setOcrError('Please select an image.');
+          setOcrLoading(false);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64 = (reader.result as string).split(',')[1];
+          const res = await fetch(API('/ocr/analyze'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ imageBase64: base64, cameraId: 0, timestamp: new Date().toISOString() })
+          });
+          const data = await res.json();
+          if (data.success) setOcrText(data.text);
+          else setOcrError(data.error || 'OCR failed');
+          setOcrLoading(false);
+        };
+        reader.readAsDataURL(ocrImage);
+      }}>
+        <input type="file" accept="image/*" onChange={e => setOcrImage(e.target.files?.[0] || null)} />
+        <button className="bg-blue-600 text-white px-4 py-1 rounded" type="submit" disabled={ocrLoading}>{ocrLoading ? 'Processing...' : 'Extract Text'}</button>
+      </form>
+      {ocrText && <div className="bg-green-100 p-2 rounded whitespace-pre-wrap">{ocrText}</div>}
+      {ocrError && <div className="bg-red-100 p-2 rounded text-red-700">{ocrError}</div>}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gray-800 text-white p-4 flex flex-col md:flex-row items-center justify-between">
@@ -328,6 +368,7 @@ function App() {
           <button className={`px-3 py-1 rounded ${view==='events'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('events')}>Events</button>
           <button className={`px-3 py-1 rounded ${view==='alerts'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('alerts')}>Alerts</button>
           <button className={`px-3 py-1 rounded ${view==='live'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('live')}>Live Analysis</button>
+          <button className={`px-3 py-1 rounded ${view==='ocr'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('ocr')}>OCR</button>
         </nav>
       </header>
       <main>
@@ -337,6 +378,7 @@ function App() {
         {view === 'events' && eventsView}
         {view === 'alerts' && alertsView}
         {view === 'live' && liveView}
+        {view === 'ocr' && ocrView}
       </main>
     </div>
   );

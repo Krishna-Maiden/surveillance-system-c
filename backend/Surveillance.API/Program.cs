@@ -47,6 +47,8 @@ else
     builder.Services.AddSingleton<IAiAnalysisService, AwsRekognitionService>();
 }
 
+builder.Services.AddSingleton<PythonOcrService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

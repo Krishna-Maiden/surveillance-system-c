@@ -4,6 +4,7 @@ from PIL import Image
 import numpy as np
 import io
 import base64
+import pytesseract
 
 app = Flask(__name__)
 
@@ -28,6 +29,21 @@ def analyze():
         return jsonify({'success': True, 'mood': mood, 'emotions': emotions})
     except Exception as e:
         print("Error in analyze")
+        print(e)
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/ocr', methods=['POST'])
+def ocr():
+    data = request.json
+    image_base64 = data.get('imageBase64')
+    if not image_base64:
+        return jsonify({'success': False, 'error': 'No imageBase64 provided'}), 400
+    try:
+        image_bytes = base64.b64decode(image_base64)
+        img = Image.open(io.BytesIO(image_bytes))
+        text = pytesseract.image_to_string(img)
+        return jsonify({'success': True, 'text': text})
+    except Exception as e:
         print(e)
         return jsonify({'success': False, 'error': str(e)}), 500
 
