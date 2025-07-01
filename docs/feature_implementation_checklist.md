@@ -6,6 +6,7 @@
 | Cloud Platform Integration | ✓ (AWS/Azure supported, config-driven) |
 | Video Ingestion & Storage | ✗ (API exists, but no real storage logic implemented) |
 | Video Retrieval & Playback | ✗ (No playback or forensic review logic) |
+| Video Export/Download | ✗ (Not implemented) |
 | Real-time Video Analytics (AI/ML) | ✓ (AWS Rekognition/Azure Cognitive integration for image/video) |
 | User Interface (Web Dashboard) | ✓ (React frontend scaffolded) |
 | Alerting & Notifications (Email/SMS/Push/Incident Mgmt) | ✗ (API exists, but no real notification integration) |
@@ -47,6 +48,8 @@
 | Search & Forensic Review | ✗ (No search UI or backend logic) |
 | Incident Tagging & Annotation | ✗ (Not implemented) |
 | OCR (Optical Character Recognition) | ✓ (Implemented via Python microservice) |
+| Export/Share Incidents | ✗ (Not implemented) |
+| Incident Workflow | ✗ (Not implemented) |
 
 ---
 
@@ -57,10 +60,22 @@
 | Performance (Low Latency, Efficient Processing) | ✗ (No explicit implementation) |
 | Scalability (Cameras, Storage) | ✗ (In-memory only, no scalable storage) |
 | Security (Encryption, RBAC, Audits) | ✗ (Not implemented) |
+| Audit Logging | ✗ (Not implemented) |
+| Privacy Controls (face blurring, consent management) | ✗ (Not implemented) |
+| Compliance (GDPR, HIPAA, etc.) | ✗ (Not implemented) |
 | Reliability & Availability (Uptime, DR, Redundancy) | ✗ (Not implemented) |
 | Usability (Intuitive UI, Customizable Dashboard) | ✗ (Basic UI only) |
+| Customizable Dashboard Widgets | ✗ (Not implemented) |
+| Camera Map/Overview | ✗ (Not implemented) |
+| Timeline/History View | ✗ (Not implemented) |
+| User Feedback/Correction | ✗ (Not implemented) |
+| Accessibility Features (WCAG compliance) | ✗ (Not implemented) |
 | Maintainability (Modular, Documented) | ✓ (Modular code, some documentation) |
 | Integration (APIs, Existing Systems) | ✗ (No external integrations) |
+| Webhook Support | ✗ (Not implemented) |
+| Data Export/Import (CSV, PDF, etc.) | ✗ (Not implemented) |
+| Automated Testing & CI/CD | ✗ (Not implemented) |
+| Ongoing Maintenance Plan | ✗ (Not present) |
 
 ---
 
