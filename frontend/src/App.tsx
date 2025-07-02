@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
+import FinancialGrid from './FinancialGrid';
 
-type View = 'dashboard' | 'cameras' | 'video' | 'events' | 'alerts' | 'live' | 'ocr';
+type View = 'dashboard' | 'cameras' | 'video' | 'events' | 'alerts' | 'live' | 'ocr' | 'financial';
 
 type Camera = { id: number; name: string; location: string };
 type EventLog = { id: number; cameraId: number; eventType: string; description: string; timestamp: string };
@@ -369,6 +370,7 @@ function App() {
           <button className={`px-3 py-1 rounded ${view==='alerts'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('alerts')}>Alerts</button>
           <button className={`px-3 py-1 rounded ${view==='live'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('live')}>Live Analysis</button>
           <button className={`px-3 py-1 rounded ${view==='ocr'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('ocr')}>OCR</button>
+          <button className={`px-3 py-1 rounded ${view==='financial'?'bg-blue-600':'bg-gray-700 hover:bg-gray-600'}`} onClick={() => setView('financial')}>Financial Grid</button>
         </nav>
       </header>
       <main>
@@ -379,6 +381,7 @@ function App() {
         {view === 'alerts' && alertsView}
         {view === 'live' && liveView}
         {view === 'ocr' && ocrView}
+        {view === 'financial' && <FinancialGrid />}
       </main>
     </div>
   );
