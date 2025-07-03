@@ -5,8 +5,8 @@ import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-
-ModuleRegistry.registerModules([AllCommunityModule]);
+import { AllEnterpriseModule } from 'ag-grid-enterprise';
+ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule ]);
 
 const rowData = [
   { jan: 38031, feb: 49473, mar: 68014, apr: 10370, may: 37787, jun: 71057, jul: 71433 },
