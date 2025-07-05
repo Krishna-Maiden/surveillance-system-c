@@ -23,5 +23,14 @@ namespace Surveillance.API.Controllers
                 return StatusCode(500, new { success = false, error = "OCR failed" });
             return Ok(new { success = true, text });
         }
+
+        [HttpPost("recognize-products")]
+        public async Task<IActionResult> RecognizeProducts([FromBody] AnalyzeImageRequest req)
+        {
+            var result = await _ocrService.RecognizeProductsAsync(req.ImageBase64);
+            if (result == null)
+                return StatusCode(500, new { success = false, error = "Product recognition failed" });
+            return Content(result, "application/json");
+        }
     }
 } 

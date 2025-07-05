@@ -5,4 +5,5 @@ pillow
 tensorflow-intel==2.16.1
 ml-dtypes==0.3.1
 tensorboard>=2.16,<2.17
-pytesseract 
+pytesseract
+ultralytics 

@@ -29,5 +29,21 @@ namespace Surveillance.API.Services
             var root = doc.RootElement;
             return root.TryGetProperty("text", out var textProp) ? textProp.GetString() : null;
         }
+
+        public async Task<string?> RecognizeProductsAsync(string imageBase64)
+        {
+            var detectUrl = _pythonServiceUrl.Replace("/ocr", "/detect");
+            using var http = new HttpClient();
+            var payload = new { imageBase64 };
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var resp = await http.PostAsync(detectUrl, content);
+            if (!resp.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var responseString = await resp.Content.ReadAsStringAsync();
+            return responseString;
+        }
     }
 } 
